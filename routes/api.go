@@ -27,6 +27,9 @@ func (a *api) Init() {
 		v1.Use(middlewares.MultichannelAuth(dataHandler))
 		{
 			v1.POST("/form_sent", dataHandler.FormSentData)
+			v1.POST("/form_submission", dataHandler.FormSubmissionData)
+			v1.POST("/form_sent/:format", dataHandler.FormSentWithFormat)
+			v1.POST("/form_submission/:format", dataHandler.FormSubmissionWithFormat)
 		}
 	}
 }

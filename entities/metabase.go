@@ -89,3 +89,34 @@ func (m *Metabase) GetQuestionData(cardID int, jsonReqBody []byte) viewmodels.Me
 
 	return dataResponse
 }
+
+func (m *Metabase) GetQuestionWithFormat(cardID int, params string, format string) ([]byte, *http.Response) {
+	url := fmt.Sprintf("%s/api/card/%v/query/%s?%s", m.baseURL, cardID, format, params)
+
+	client := http.Client{}
+
+	request, err := http.NewRequest("POST", url, nil)
+	if err != nil {
+		log.Fatalf("An Error Occured: %v", err)
+		return nil, nil
+	}
+
+	request.Header.Set("X-Metabase-Session", m.sessionID)
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Fatalf("An Error Occured: %v", err)
+		return nil, nil
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalf("An Error Occured: %v", err)
+		return nil, nil
+	}
+
+	return body, resp
+}
