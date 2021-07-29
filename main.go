@@ -2,6 +2,7 @@ package main
 
 import (
 	route "csat-report-webhook/routes"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -19,5 +20,5 @@ func main() {
 	api := route.NewApi(r)
 	api.Init()
 
-	r.Run()
+	r.Run(":" + os.Getenv("PORT"))
 }
